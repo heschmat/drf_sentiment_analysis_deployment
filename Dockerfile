@@ -9,6 +9,8 @@ ENV PYTHONUNBUFFERED 1
 COPY requirements.txt ./requirements.dev.txt /tmp/
 # COPY the project files
 COPY ./backend /code
+# COPY the helper scripts run by the docker app.
+COPY ./scripts /scripts
 WORKDIR /code
 EXPOSE 8000
 
@@ -18,6 +20,12 @@ RUN python -m venv /py && \
     apk update && \
     # Install pg_isready:
     apk add --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        # We need a C compiler to build uWSGI:
+        build-base \
+        musl-dev \
+        # `linux-headers is a requirement for the uwsgi installation:
+        linux-headers && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
@@ -25,9 +33,12 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     chmod +x /code/wait_for_db.sh && \
+    chmod -R +x /scripts && \
     adduser --disabled-password --no-create-home django_user && \
     chown -R django_user:django_user /code
 
-ENV PATH="/py/bin:$PATH"
+ENV PATH="/scripts:/py/bin:$PATH"
 
 USER django_user
+
+CMD ["run.sh"]

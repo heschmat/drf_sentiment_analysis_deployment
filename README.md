@@ -158,3 +158,24 @@ docker compose run --rm web sh -c "python manage.py showmigrations"
 
 # The [X] next to each migration indicates that the migration has been executed.
 ```
+
+# Deployment:
+
+## uwsgi
+
+First modify the `Dockerfile` acccordingly. Do NOT forget to add `scripts` to the path, so that we can run the scripts.
+
+A few notes about changes to the `Dockerfile`:
+
+- `build-base`: This meta-package in Alpine provides essential tools like `gcc`, `libc-dev`, and `make`, which are critical for compiling C extensions (e.g., uWSGI).
+
+- Bundling it under `.tmp-build-deps` ensures it's installed only temporarily, which keeps the final image size small after cleanup.
+
+- Combining `musl-dev` with `build-base` ensures that Alpine's default `musl` C standard library is fully set up for development.
+
+- Removing `.tmp-build-deps` after the build phase ensures your final image only retains runtime dependencies, making it more efficient.
+
+```sh
+mkdir scripts  # at the root directory
+touch scripts/run.sh
+```
