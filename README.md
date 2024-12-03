@@ -163,6 +163,8 @@ docker compose run --rm web sh -c "python manage.py showmigrations"
 
 ## uwsgi
 
+Commit Message: `Add uWSGI to project`
+
 First modify the `Dockerfile` acccordingly. Do NOT forget to add `scripts` to the path, so that we can run the scripts.
 
 A few notes about changes to the `Dockerfile`:
@@ -179,3 +181,18 @@ A few notes about changes to the `Dockerfile`:
 mkdir scripts  # at the root directory
 touch scripts/run.sh
 ```
+
+## proxy configs
+
+We need to add configuration files to our projects that tell `Nginx` how to run the application.
+
+Commit Message: ``
+
+```sh
+mkdir proxy
+touch ./proxy/default.conf.tpl
+touch ./proxy/uwsgi_params  # https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html
+touch ./proxy/run.sh
+```
+
+##
