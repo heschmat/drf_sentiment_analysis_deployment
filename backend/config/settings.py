@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd-party apps:
+    'rest_framework',
+
+    # local apps:
+    'ml_api',
 ]
 
 MIDDLEWARE = [
@@ -75,10 +81,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'ml_db'),  # Default value 'ml_db' in case the env variable is missing
+        'USER': os.getenv('POSTGRES_USER', 'localadmin'),  # Default value 'localadmin'
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'changeme'),  # Default value 'changeme'
+        'HOST': os.getenv('DB_HOST', 'db'),  # DB service name from docker-compose
+        'PORT': os.getenv('DB_PORT', '5432'),  # Default port for PostgreSQL
     }
 }
+
 
 
 # Password validation
