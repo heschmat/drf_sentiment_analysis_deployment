@@ -35,7 +35,8 @@ RUN python -m venv /py && \
     chmod +x /code/wait_for_db.sh && \
     chmod -R +x /scripts && \
     adduser --disabled-password --no-create-home django_user && \
-    chown -R django_user:django_user /code
+    mkdir -p /vol/web/static && chmod -R 755 /vol && \
+    chown -R django_user:django_user /code /vol
 
 ENV PATH="/scripts:/py/bin:$PATH"
 

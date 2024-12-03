@@ -18,7 +18,7 @@ class SentimentAnalysisView(APIView):
             return Response({'error': 'Text input is required'}, status=400)
 
         # Make prediction
-        # @TODO: for now simply random number (0, 1)
+        #@TODO: for now simply random number (0, 1)
         random.seed(len(text.split()))
         pred = random.random()
         result = {'label': 'POS' if pred > .5 else 'NEG', 'score': pred}

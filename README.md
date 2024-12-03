@@ -186,13 +186,27 @@ touch scripts/run.sh
 
 We need to add configuration files to our projects that tell `Nginx` how to run the application.
 
-Commit Message: ``
+Commit Message: `Add proxy configs.`
 
 ```sh
 mkdir proxy
-touch ./proxy/default.conf.tpl
+touch ./proxy/default.conf.tpl  # the variables are defined in the ./proxy/Dockerfile
 touch ./proxy/uwsgi_params  # https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html
 touch ./proxy/run.sh
 ```
 
-##
+## proxy Dockerfile
+
+```sh
+touch ./proxy/Dockerfile
+touch docker-compose-deploy.yml  # at the root level
+
+```
+
+```sh
+# At the root level
+docker compose -f docker-compose-deploy.yml build --no-cache
+docker compose -f docker-compose-deploy.yml up
+docker compose -f docker-compose-deploy.yml down
+docker compose -f docker-compose-deploy.yml run --rm web sh
+```
